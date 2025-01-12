@@ -1,0 +1,60 @@
+{
+  "products": [
+    {
+      "id": "clg1234567890",
+      "name": "Classic Cotton T-Shirt",
+      "description": "Comfortable cotton t-shirt for everyday wear",
+      "price": 29.99,
+      "comparePrice": 34.99,
+      "sku": "TS-BLK-M-001",
+      "barcode": "123456789",
+      "inventory": 100,
+      "isActive": true,
+      "brand": "ClassicWear",
+      "weight": 0.2,
+      "dimensions": "30x20x2",
+      "material": "100% Cotton",
+      "careInstructions": "Machine wash cold",
+      "categoryId": "cat1",
+      "category": { "name": "T-Shirts" },
+      "images": [
+        {
+          "id": "img1",
+          "url": "/placeholder.jpeg",
+          "alt": "Classic Cotton T-Shirt",
+          "isDefault": true
+        }
+      ],
+      "createdAt": "2024-01-01",
+      "updatedAt": "2024-01-01"
+    },
+    {
+      "id": "clg2345678901",
+      "name": "Premium Denim Jeans",
+      "description": "High-quality denim jeans with perfect fit",
+      "price": 79.99,
+      "comparePrice": 89.99,
+      "sku": "JN-BLU-32-002",
+      "barcode": "987654321",
+      "inventory": 5,
+      "isActive": true,
+      "brand": "DenimCo",
+      "weight": 0.5,
+      "dimensions": "40x30x5",
+      "material": "Denim",
+      "careInstructions": "Wash inside out",
+      "categoryId": "cat2",
+      "category": { "name": "Pants" },
+      "images": [
+        {
+          "id": "img2",
+          "url": "/placeholder.jpeg",
+          "alt": "Premium Denim Jeans",
+          "isDefault": true
+        }
+      ],
+      "createdAt": "2024-01-02",
+      "updatedAt": "2024-01-02"
+    }
+  ]
+}

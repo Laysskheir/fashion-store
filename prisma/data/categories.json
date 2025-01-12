@@ -1,0 +1,23 @@
+{
+    "categories": [
+      {
+        "id": "cat1",
+        "name": "Parent Category",
+        "slug": "parent-category",
+        "description": "This is a parent category",
+        "image": null,
+        "isActive": true,
+        "parentId": null
+      },
+      {
+        "id": "cat2",
+        "name": "Child Category",
+        "slug": "child-category",
+        "description": "This is a child category",
+        "image": null,
+        "isActive": true,
+        "parentId": "cat1"
+      }
+    ]
+  }
+  
