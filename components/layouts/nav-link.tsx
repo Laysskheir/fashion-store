@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type Props = {
   href: string;
@@ -9,14 +9,14 @@ type Props = {
 };
 
 export const NavLink = ({ href, children }: Props) => {
-  const segment = useSelectedLayoutSegment();
-  const isActive =
-    segment === href.slice(1) || (segment === null && href === "/");
+  const pathname = usePathname();
+  const isActive = pathname === href;
 
   return (
     <div className="relative group">
       <Link
         href={href}
+        prefetch={true}
         className={cn(
           "w-full h-full block text-sm py-4 px-5 transition-colors",
           "group-hover:text-foreground",

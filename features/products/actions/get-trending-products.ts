@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { sanitizeArrayOfObjects } from "@/lib/utils";
 
 export async function getTrendingProducts() {
   try {
@@ -16,7 +17,9 @@ export async function getTrendingProducts() {
       }
     });
 
-    return products;
+    // Sanitize products to convert Decimal types
+    const sanitizedProducts = sanitizeArrayOfObjects(products);
+    return sanitizedProducts;
   } catch (error) {
     console.error('Error fetching trending products:', error);
     return [];

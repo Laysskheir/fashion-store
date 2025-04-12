@@ -1,10 +1,13 @@
+// components/sections/featured-brands.tsx
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { ArrowRight, Star, Globe } from "lucide-react";
 import { Brand } from "@prisma/client";
+import { cn } from "@/lib/utils";
 
 interface FeaturedBrandsProps {
   brands: Brand[];
@@ -12,91 +15,145 @@ interface FeaturedBrandsProps {
 
 export default function FeaturedBrands({ brands }: FeaturedBrandsProps) {
   return (
-    <section className="container mx-auto px-4">
-      <div className="flex items-center justify-between mb-8">
-        <div className="mb-4">
-          <h2 className="text-3xl font-bold mb-2">Featured Fashion Brands</h2>
-          <p className="text-muted-foreground">
-            Discover our curated selection of premium fashion brands and styles.
-          </p>
-        </div>
-        <Link href="/brands">
-          <Button variant="ghost" className="group">
-            All Brands
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {brands.map((brand) => (
-          <Link key={brand.id} href={`/brands/${brand.id}`}>
-            <Card className="group h-full hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="relative aspect-square mb-4 overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200">
-                  <Image
-                    src={brand.logo || "/placeholder.svg"}
-                    alt={brand.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  {brand.featured && (
-                    <div className="absolute top-2 right-2">
-                      <span className="bg-primary/90 text-primary-foreground text-xs px-2 py-1 rounded-full">
-                        Featured
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <h3 className="font-semibold text-lg mb-2">{brand.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {brand.description}
-                </p>
-                <div className="text-sm">
-                  {brand.productCount} Products Available
-                </div>
-              </CardContent>
-            </Card>
+    <section className="py-20">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row items-center justify-between mb-12"
+        >
+          <div className="text-center md:text-left mb-6 md:mb-0">
+            <h2 className="text-3xl font-bold mb-3">Featured Brands</h2>
+            <p className="text-muted-foreground">
+              Discover our curated selection of premium fashion brands
+            </p>
+          </div>
+          <Link href="/brands">
+            <Button variant="outline" size="lg">
+              View All Brands
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </Link>
-        ))}
-      </div>
+        </motion.div>
 
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-gradient-to-br from-black via-orange-700/50 to-neutral-800">
-          <div className="absolute inset-0 opacity-50 mix-blend-overlay bg-gradient-to-t from-black via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/80" />
-          <div className="absolute bottom-6 left-6 right-6">
-            <h3 className="text-white text-2xl font-bold mb-2">
-              Summer Fashion Essentials
-            </h3>
-            <p className="text-gray-200 mb-4">
-              Refresh your wardrobe with breezy, vibrant summer styles that keep you cool and trendy.
-            </p>
-            <Link href="/categories/summer-fashion">
-              <Button variant="secondary" className="bg-white/90 hover:bg-white text-black">
-                Explore Summer Looks
-              </Button>
-            </Link>
-          </div>
-        </div>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {brands.map((brand) => (
+            <motion.div
+              key={brand.id}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.3 },
+                },
+              }}
+              whileHover={{ y: -5 }}
+              className="group"
+            >
+              <Link href={`/brands/${brand.id}`}>
+                <Card className="h-full border-border/50 hover:border-primary/50 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-semibold text-lg">{brand.name}</h3>
+                      {brand.featured && (
+                        <span className="text-xs font-medium text-primary flex items-center gap-1">
+                          <Star className="h-3.5 w-3.5" />
+                          Featured
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-muted-foreground text-sm mb-4">
+                      {brand.description || "Premium fashion brand"}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      {brand.website && (
+                        <Link
+                          href={brand.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1"
+                        >
+                          <Globe className="h-3.5 w-3.5" />
+                          Website
+                        </Link>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-muted-foreground hover:text-primary"
+                      >
+                        View Collection
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
 
-        <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-gradient-to-br from-black via-blue-700/50 to-neutral-800">
-          <div className="absolute inset-0 opacity-50 mix-blend-overlay bg-gradient-to-t from-black via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/80" />
-          <div className="absolute bottom-6 left-6 right-6">
-            <h3 className="text-white text-2xl font-bold mb-2">
-              Winter Wardrobe Elegance
-            </h3>
-            <p className="text-gray-200 mb-4">
-              Stay warm and stylish with our curated selection of cozy, sophisticated winter fashion.
-            </p>
-            <Link href="/categories/winter-fashion">
-              <Button variant="secondary" className="bg-white/90 hover:bg-white text-black">
-                Shop Winter Styles
-              </Button>
-            </Link>
-          </div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {[
+            {
+              title: "Summer Collection",
+              description: "Explore our latest summer fashion essentials",
+              href: "/categories/summer-fashion",
+            },
+            {
+              title: "Winter Collection",
+              description: "Discover premium winter fashion pieces",
+              href: "/categories/winter-fashion",
+            },
+          ].map((section) => (
+            <motion.div
+              key={section.title}
+              whileHover={{ y: -5 }}
+              className="group"
+            >
+              <Link href={section.href}>
+                <Card className="h-full border-border/50 hover:border-primary/50 transition-colors">
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold text-lg mb-2">
+                      {section.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-4">
+                      {section.description}
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-muted-foreground hover:text-primary"
+                    >
+                      Shop Now
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
@@ -104,31 +161,42 @@ export default function FeaturedBrands({ brands }: FeaturedBrandsProps) {
 
 export function FeaturedBrandsLoading() {
   return (
-    <div className="container mx-auto px-4">
-      <div className="flex items-center justify-between mb-8">
-        <div>
+    <div className="container mx-auto px-4 py-20">
+      <div className="flex items-center justify-between mb-12">
+        <div className="space-y-3">
           <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-4 w-64 mt-2" />
+          <Skeleton className="h-4 w-64" />
         </div>
         <Skeleton className="h-10 w-32" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[1, 2, 3, 4].map((i) => (
-          <Card key={i}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <Card key={i} className="h-full">
             <CardContent className="p-6">
-              <Skeleton className="aspect-square w-full rounded-lg mb-4" />
-              <Skeleton className="h-6 w-3/4 mb-2" />
+              <div className="flex items-center justify-between mb-4">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-16" />
+              </div>
               <Skeleton className="h-4 w-full mb-4" />
-              <Skeleton className="h-4 w-1/2" />
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-24" />
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
         {[1, 2].map((i) => (
-          <Skeleton key={i} className="aspect-[16/9] w-full rounded-lg" />
+          <Card key={i}>
+            <CardContent className="p-6">
+              <Skeleton className="h-6 w-32 mb-2" />
+              <Skeleton className="h-4 w-full mb-4" />
+              <Skeleton className="h-4 w-20" />
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>

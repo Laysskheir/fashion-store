@@ -1,6 +1,4 @@
-import HeroCarousel from "@/components/HeroCarousel";
 import PopularPicks from "@/components/sections/popular-picks";
-import { getSubCategory } from "@/features/categories/actions/subcategories";
 import { getAllSliders } from "@/features/silders/actions/get-all-sliders";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
@@ -11,6 +9,8 @@ import { getTrendingProducts } from "@/features/products/actions/get-trending-pr
 import { getFeaturedBrands } from "@/features/brands/actions/get-featured-brands";
 import { getPopularPicksProducts } from "@/features/products/actions/get-popular-picks-products";
 import TopCollections from "@/components/sections/top-collections";
+import { getCategories } from "@/features/categories/actions/categories";
+import HeroCarousel from "@/components/sections/HeroCarousel";
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-  const [sliders, subcategories, trendingProducts, featuredBrands, popularPicksProducts] = await Promise.all([
+  const [sliders, categories, trendingProducts, featuredBrands, popularPicksProducts] = await Promise.all([
     getAllSliders(),
-    getSubCategory(),
+    getCategories(),
     getTrendingProducts(),
     getFeaturedBrands(),
     getPopularPicksProducts(),
@@ -36,7 +36,7 @@ export default async function Home() {
       {/* <TrendingNow products={trendingProducts} /> */}
 
       {/* Top Collections - Curated categories */}
-      <TopCollections subcategories={subcategories} />
+      <TopCollections categories={categories} />
 
       {/* Featured Brands */}
       <FeaturedBrands brands={featuredBrands} />

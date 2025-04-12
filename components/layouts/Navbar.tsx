@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Logo from "./Logo";
 import { DarkMode } from "./dark-mode";
@@ -5,16 +6,21 @@ import { Heart, Menu, SearchIcon, UserIcon, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { CartButton } from "./cart-button";
 import { NavMenu } from "./nav-menu";
-import { getCategories } from "@/features/categories/actions/categories";
 import { NavLink } from "./nav-link";
 import Link from "next/link";
 import { SearchDrawer } from "./search-drawer";
 import UserProfile from "./user-button";
-import { getSession } from "@/lib/auth";
 import { Banner } from "./banner";
 import { WishlistButton } from "./wishlist-button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import { ScrollArea } from "../ui/scroll-area";
+import { useSession } from "@/lib/auth-client";
 
 const navMenu = [
   {
@@ -43,9 +49,8 @@ const navMenu = [
   },
 ];
 
-async function Navbar() {
-  const categories = await getCategories();
-  const session = await getSession()
+export default function Navbar({ categories }: { categories: any[] }) {
+  const { data: session } = useSession();
 
   return (
     <header>
@@ -73,6 +78,7 @@ async function Navbar() {
                         <Link
                           key={item.path}
                           href={item.path}
+                          prefetch={true}
                           className="block px-2 py-2 text-lg font-medium hover:bg-accent rounded-md"
                         >
                           {item.name}
@@ -85,6 +91,7 @@ async function Navbar() {
                           <div key={category.id} className="space-y-2">
                             <Link
                               href={`/categories/${category.slug}`}
+                              prefetch={true}
                               className="block px-2 py-2 text-base font-medium hover:bg-accent rounded-md"
                             >
                               {category.name}
@@ -94,6 +101,7 @@ async function Navbar() {
                                 <Link
                                   key={subcat.id}
                                   href={`/categories/${subcat.slug}`}
+                                  prefetch={true}
                                   className="block px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md"
                                 >
                                   {subcat.name}
@@ -140,7 +148,6 @@ async function Navbar() {
               </SearchDrawer>
               <WishlistButton className="hidden md:flex" />
               <CartButton className="flex" /> {/* Always show cart */}
-
               {session?.user ? (
                 <UserProfile user={session.user} className="hidden md:flex" />
               ) : (
@@ -151,7 +158,7 @@ async function Navbar() {
                   aria-label="User Profile"
                   asChild
                 >
-                  <Link href="/auth/signin">
+                  <Link href="/auth/signin" prefetch={true}>
                     <UserIcon className="w-4 h-4" />
                   </Link>
                 </Button>
@@ -170,5 +177,3 @@ async function Navbar() {
     </header>
   );
 }
-
-export default Navbar;

@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { env } from "process";
 import { twMerge } from "tailwind-merge";
+import { Prisma } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -80,4 +81,26 @@ export function generateOrderNumber(): string {
 
 export function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat("en-US").format(new Date(date));
+}
+
+export function safeDecimalToNumber(decimal: Prisma.Decimal | number | undefined): number {
+  if (decimal === undefined) return 0;
+  if (typeof decimal === 'number') return decimal;
+  return decimal.toNumber();
+}
+
+export function sanitizeDecimalFields<T>(obj: T): T {
+  const sanitizedObj = { ...obj };
+  
+  for (const key in sanitizedObj) {
+    if (sanitizedObj[key] instanceof Prisma.Decimal) {
+      sanitizedObj[key] = safeDecimalToNumber(sanitizedObj[key]) as any;
+    }
+  }
+  
+  return sanitizedObj;
+}
+
+export function sanitizeArrayOfObjects<T>(array: T[]): T[] {
+  return array.map(item => sanitizeDecimalFields(item));
 }

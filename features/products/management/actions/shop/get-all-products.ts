@@ -3,11 +3,12 @@
 import { db } from "@/lib/db";
 import { unstable_cache } from "next/cache";
 import { ProductWithDetails } from "../../types/product.types";
+import { sanitizeArrayOfObjects } from "@/lib/utils";
 
 export const getAllProducts = unstable_cache(
     async (): Promise<ProductWithDetails[]> => {
         try {
-            return await db.product.findMany({
+            const products = await db.product.findMany({
                 where: {
                     isActive: true,
                 },
@@ -30,6 +31,10 @@ export const getAllProducts = unstable_cache(
                     createdAt: "desc",
                 },
             });
+
+            // Sanitize products to convert Decimal types
+            const sanitizedProducts = sanitizeArrayOfObjects(products);
+            return sanitizedProducts;
         } catch (error) {
             console.error("[GET_ALL_PRODUCTS]", error);
             return [];

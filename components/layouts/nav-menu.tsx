@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,14 +11,14 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import { Category } from "@prisma/client"
-import {  LogsIcon } from "lucide-react"
+} from "@/components/ui/navigation-menu";
+import { Category } from "@prisma/client";
+import { LogsIcon } from "lucide-react";
 
 interface NavMenuProps {
   categories: (Category & {
-    children: Category[]
-  })[]
+    children: Category[];
+  })[];
 }
 
 const COLORS = [
@@ -29,7 +29,7 @@ const COLORS = [
 ];
 
 export function NavMenu({ categories }: NavMenuProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
   const [colorIndex, setColorIndex] = React.useState(0);
 
   React.useEffect(() => {
@@ -101,7 +101,7 @@ export function NavMenu({ categories }: NavMenuProps) {
         </NavigationMenuList>
       </NavigationMenu>
     </>
-  )
+  );
 }
 
 const ListItem = React.forwardRef<
@@ -110,13 +110,13 @@ const ListItem = React.forwardRef<
 >(({ className, title, children, ...props }, ref) => {
   return (
     <NavigationMenuLink asChild>
-      <a
-        ref={ref}
+      <Link
+        href={props.href || ""}
+        prefetch={true}
         className={cn(
           "block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
           className
         )}
-        {...props}
       >
         <div className="text-sm font-medium leading-none">{title}</div>
         {children && (
@@ -124,8 +124,8 @@ const ListItem = React.forwardRef<
             {children}
           </p>
         )}
-      </a>
+      </Link>
     </NavigationMenuLink>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";

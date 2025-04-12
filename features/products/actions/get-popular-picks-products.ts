@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { sanitizeArrayOfObjects } from '@/lib/utils';
 
 export async function getPopularPicksProducts() {
   try {
@@ -27,8 +28,10 @@ export async function getPopularPicksProducts() {
       },
     });
 
-    // Clean up the response by removing orderItems
-    return products;
+    // Sanitize products to convert Decimal types
+    const sanitizedProducts = sanitizeArrayOfObjects(products);
+
+    return sanitizedProducts;
 
   } catch (error) {
     console.error('Error fetching popular picks products:', error);

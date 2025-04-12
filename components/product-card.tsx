@@ -6,7 +6,7 @@ import { Product, ProductImage, Variant } from "@prisma/client";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { QuickViewModal } from "./quick-view-modal";
+import { QuickViewModal } from "./modals/quick-view-modal";
 
 interface ProductCardProps {
     product: ProductWithRelations;

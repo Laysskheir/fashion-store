@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { unstable_cache } from "next/cache";
 import { ProductWithDetails } from "../../types/product.types";
+import { sanitizeDecimalFields } from "@/lib/utils";
 
 export const getShopProduct = unstable_cache(
     async (slug: string): Promise<ProductWithDetails | null> => {
@@ -52,7 +53,8 @@ export const getShopProduct = unstable_cache(
                 },
             });
 
-            return product;
+            // Sanitize product to convert Decimal types
+            return product ? sanitizeDecimalFields(product) : null;
         } catch (error) {
             console.error("[GET_PRODUCT]", error);
             return null;

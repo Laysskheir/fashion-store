@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { useCart } from "@/hooks/useCart";
 import { CartSheet } from "../cart-sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { ShoppingCart } from "lucide-react";
 
@@ -14,6 +14,28 @@ interface CartButtonProps {
 export function CartButton({ className }: CartButtonProps) {
   const { totalItems } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn(
+          "border-l ring-0 rounded-none h-12 md:h-14 w-12 md:w-14 shrink-0",
+          className
+        )}
+        aria-label="Shopping Cart"
+        disabled
+      >
+        <ShoppingCart className="h-4 w-4 opacity-50" />
+      </Button>
+    );
+  }
 
   return (
     <div className="relative">

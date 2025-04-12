@@ -1,17 +1,32 @@
 import Footer from "@/components/layouts/Footer";
 import Navbar from "@/components/layouts/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 import React from "react";
-import { Toaster } from "sonner";
+import { getCategories } from "@/features/categories/actions/categories";
+import { unstable_cache } from "@/lib/unstable-cache";
 
-const ShopLayout = ({ children }: { children: React.ReactNode }) => {
+// Cache the categories fetch
+const getCachedCategories = unstable_cache(
+  async () => {
+    return getCategories();
+  },
+  ["categories"],
+  { revalidate: 3600 }
+);
+
+export default async function ShopLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const categories = await getCachedCategories();
+
   return (
     <div>
-      <Navbar />
+      <Navbar categories={categories} />
       {children}
       <Footer />
-      <Toaster/>
+      <Toaster />
     </div>
   );
-};
-
-export default ShopLayout;
+}
